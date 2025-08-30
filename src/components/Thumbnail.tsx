@@ -1,6 +1,4 @@
 "use client";
-
-// ++ ۱. useState را از react وارد کنید ++
 import { useState } from "react";
 import { Movie } from "@/types";
 import Image from "next/image";
@@ -13,16 +11,13 @@ interface Props {
 
 function Thumbnail({ movie }: Props) {
   const { openModal } = useMovieModal();
-  // ++ ۲. یک state برای کنترل وضعیت هاور هر تامنیل تعریف کنید ++
   const [isHovered, setIsHovered] = useState(false);
 
   return (
     <div
       onClick={() => openModal(movie)}
-      // ++ ۳. توابع جاوااسکریپت را برای مدیریت ورود و خروج موس اضافه کنید ++
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
-      // کلاس 'group' دیگر نیازی نیست و حذف شده است
       className="relative h-28 min-w-[180px] cursor-pointer transition duration-200 ease-out md:h-36 md:min-w-[260px] md:hover:scale-105"
     >
       <Image
@@ -34,7 +29,6 @@ function Thumbnail({ movie }: Props) {
         alt={movie.title || movie.name}
       />
 
-      {/* ++ ۴. نمایش overlay را به متغیر 'isHovered' وابسته کنید ++ */}
       <div
         className={`absolute inset-0 flex flex-col justify-end rounded-sm bg-black/10 p-2.5 transition-opacity duration-300 md:rounded ${
           isHovered ? "bg-black/40 opacity-100" : "opacity-0"
