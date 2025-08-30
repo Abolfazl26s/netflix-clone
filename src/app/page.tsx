@@ -6,6 +6,7 @@ import Header from "@/components/Header";
 import Row from "@/components/Row";
 import { Movie } from "@/types";
 import requests from "@/utils/requests";
+import MovieModal from "@/components/MovieModal";
 
 export default async function Home() {
   const session = await getServerSession();
@@ -48,6 +49,7 @@ export default async function Home() {
           <Row title="Romance Movies" movies={romanceMovies.results} />
           <Row title="Documentaries" movies={documentaries.results} />
         </section>
+        <MovieModal />
       </main>
     </div>
   );
