@@ -14,7 +14,6 @@ import {
 } from "@heroicons/react/24/solid";
 import useMovieModal from "@/store/modalStore";
 import { Genre, Movie } from "@/types";
-// ++ ۲. کامپوننت Link را وارد کنید ++
 import Link from "next/link";
 
 function MovieModal() {
