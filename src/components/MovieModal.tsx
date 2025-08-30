@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import ReactPlayer from "react-player";
+
 import {
   XMarkIcon,
   PlayIcon,
@@ -9,9 +10,12 @@ import {
   HandThumbUpIcon,
   SpeakerWaveIcon,
   SpeakerXMarkIcon,
+  ArrowTopRightOnSquareIcon,
 } from "@heroicons/react/24/solid";
 import useMovieModal from "@/store/modalStore";
 import { Genre, Movie } from "@/types";
+// ++ ۲. کامپوننت Link را وارد کنید ++
+import Link from "next/link";
 
 function MovieModal() {
   const { movie, isOpen, closeModal } = useMovieModal();
@@ -19,7 +23,6 @@ function MovieModal() {
   const [genres, setGenres] = useState<Genre[]>([]);
   const [muted, setMuted] = useState(true);
 
-  // هر بار که فیلم در store تغییر می‌کنه، تریلر اون رو fetch می‌کنیم
   useEffect(() => {
     if (!movie) return;
 
@@ -46,41 +49,43 @@ function MovieModal() {
     fetchMovie();
   }, [movie]);
 
-  // اگه مودال باز نبود، چیزی رندر نکن
   if (!isOpen) return null;
 
   return (
-    // Overlay
     <div
-      className="fixed inset-0 z-50 flex items-center justify-center overflow-y-auto bg-black/70 transition-all duration-300"
+      className="fixed inset-0 z-50 flex items-center justify-center overflow-y-auto bg-black/80 transition-all duration-300"
       onClick={closeModal}
     >
-      {/* Modal Content */}
       <div
-        className="relative mx-auto w-full max-w-3xl overflow-hidden rounded-md bg-[#181818]"
-        onClick={(e) => e.stopPropagation()} // جلوگیری از بسته شدن با کلیک داخل مودال
+        className="relative mx-auto w-full max-w-3xl overflow-hidden rounded-lg bg-[#141414] shadow-2xl"
+        onClick={(e) => e.stopPropagation()}
       >
         <button
           onClick={closeModal}
-          className="modalButton absolute right-5 top-5 !z-40 h-9 w-9 border-none bg-[#181818] hover:bg-[#181818]"
+          className="modalButton absolute right-4 top-4 !z-40 h-9 w-9 border-none bg-black/50 hover:bg-black/75"
         >
           <XMarkIcon className="h-6 w-6" />
         </button>
 
         <div className="relative pt-[56.25%]">
-          {" "}
-          {/* Aspect Ratio 16:9 */}
-          <ReactPlayer
-            src={`https://www.youtube.com/watch?v=${trailer}`}
-            width="100%"
-            height="100%"
-            style={{ position: "absolute", top: "0", left: "0" }}
-            playing
-            muted={muted}
-          />
+          {trailer ? (
+            <ReactPlayer
+              src={`https://www.youtube.com/watch?v=${trailer}`}
+              width="100%"
+              height="100%"
+              style={{ position: "absolute", top: "0", left: "0" }}
+              playing
+              muted={muted}
+            />
+          ) : (
+            <div className="absolute top-0 left-0 flex h-full w-full items-center justify-center bg-black">
+              <p className="text-white">No trailer available</p>
+            </div>
+          )}
+
           <div className="absolute bottom-10 flex w-full items-center justify-between px-10">
             <div className="flex space-x-2">
-              <button className="flex items-center gap-x-2 rounded bg-white px-8 text-xl font-bold text-black transition hover:bg-[#e6e6e6]">
+              <button className="flex items-center gap-x-2 rounded bg-white px-6 py-2 text-lg font-bold text-black transition hover:bg-gray-200 cursor-pointer">
                 <PlayIcon className="h-7 w-7 text-black" />
                 Play
               </button>
@@ -90,6 +95,10 @@ function MovieModal() {
               <button className="modalButton">
                 <HandThumbUpIcon className="h-7 w-7" />
               </button>
+
+              <Link href={`/movie/${movie?.id}`} className="modalButton">
+                <ArrowTopRightOnSquareIcon className="h-7 w-7" />
+              </Link>
             </div>
             <button className="modalButton" onClick={() => setMuted(!muted)}>
               {muted ? (
@@ -101,34 +110,43 @@ function MovieModal() {
           </div>
         </div>
 
-        <div className="flex space-x-16 rounded-b-md bg-[#181818] px-10 py-8">
-          <div className="space-y-6 text-lg">
-            <div className="flex items-center space-x-2 text-sm">
-              <p className="font-semibold text-green-400">
-                {movie!.vote_average * 10}% Match
-              </p>
-              <p className="font-light">
-                {movie?.release_date || movie?.first_air_date}
-              </p>
-              <div className="flex h-4 items-center justify-center rounded border border-white/40 px-1.5 text-xs">
-                HD
-              </div>
+        <div className="space-y-4 bg-[#141414] px-10 py-8">
+          <h2 className="text-3xl font-bold text-white">
+            {movie?.title || movie?.name || movie?.original_name}
+          </h2>
+          <div className="flex items-center space-x-4 text-base">
+            <p className="font-semibold text-green-400">
+              {movie!.vote_average.toFixed(1) * 10}% Match
+            </p>
+            <p className="text-gray-400">
+              {movie?.release_date || movie?.first_air_date}
+            </p>
+            <div className="flex bg-red-400 h-5 items-center justify-center rounded border border-gray-400 px-1.5 text-xs text-white">
+              HD
             </div>
-            <div className="flex flex-col gap-x-10 gap-y-4 font-light md:flex-row">
-              <p className="w-5/6">{movie?.overview}</p>
-              <div className="flex flex-col space-y-3 text-sm">
-                <div>
-                  <span className="text-[gray]">Genres: </span>
+          </div>
+          <div className="grid grid-cols-1 gap-x-10 gap-y-6 md:grid-cols-3">
+            <p className="w-full text-base text-white md:col-span-2">
+              {movie?.overview}
+            </p>
+            <div className="flex flex-col space-y-3 text-sm">
+              <div>
+                <span className="text-gray-500">Genres: </span>
+                <span className="text-white">
                   {genres.map((genre) => genre.name).join(", ")}
-                </div>
-                <div>
-                  <span className="text-[gray]">Original language: </span>
+                </span>
+              </div>
+              <div>
+                <span className="text-gray-500">Original language: </span>
+                <span className="text-white capitalize">
                   {movie?.original_language}
-                </div>
-                <div>
-                  <span className="text-[gray]">Total votes: </span>
-                  {movie?.vote_count}
-                </div>
+                </span>
+              </div>
+              <div>
+                <span className="text-gray-500">Total votes: </span>
+                <span className="text-white">
+                  {movie?.vote_count.toLocaleString()}
+                </span>
               </div>
             </div>
           </div>
