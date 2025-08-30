@@ -1,3 +1,4 @@
+// src/components/Thumbnail.tsx
 import { Movie } from "@/types";
 import Image from "next/image";
 

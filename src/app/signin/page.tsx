@@ -1,3 +1,4 @@
+// src/app/signin/page.tsx
 "use client";
 
 import { useState } from "react";
@@ -14,7 +15,7 @@ function SignInPage() {
     e.preventDefault();
     setError("");
     const result = await signIn("credentials", {
-      redirect: false, // ما خودمان کاربر را هدایت می‌کنیم
+      redirect: false,
       email,
       password,
     });
@@ -22,7 +23,7 @@ function SignInPage() {
     if (result?.error) {
       setError("Invalid email or password");
     } else {
-      router.push("/"); // هدایت به صفحه اصلی بعد از ورود موفق
+      router.push("/");
     }
   };
 
@@ -43,14 +44,14 @@ function SignInPage() {
             type="email"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
-            placeholder="Email"
+            placeholder="type: test@example.com for login"
             className="rounded bg-gray-700 p-3 text-white"
           />
           <input
             type="password"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
-            placeholder="Password"
+            placeholder="type:password"
             className="rounded bg-gray-700 p-3 text-white"
           />
           <button type="submit" className="rounded bg-red-600 p-3 font-bold">

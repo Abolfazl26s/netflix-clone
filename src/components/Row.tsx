@@ -1,52 +1,62 @@
+// src/components/Row.tsx
 "use client";
 
 import { Movie } from "@/types";
-import Image from "next/image";
-import { useEffect, useState } from "react";
+import { useRef, useState } from "react";
+import Thumbnail from "./Thumbnail";
 
 interface Props {
-  netflixOriginals: Movie[];
+  title: string;
+  movies: Movie[];
 }
 
-function Banner({ netflixOriginals }: Props) {
-  // State to hold the random movie
-  const [movie, setMovie] = useState<Movie | null>(null);
+function Row({ title, movies }: Props) {
+  const rowRef = useRef<HTMLDivElement>(null);
+  const [isMoved, setIsMoved] = useState(false);
 
-  // Pick a random movie on component mount
-  useEffect(() => {
-    setMovie(
-      netflixOriginals[Math.floor(Math.random() * netflixOriginals.length)]
-    );
-  }, [netflixOriginals]);
-
-  const baseUrl = "https://image.tmdb.org/t/p/original/";
+  const handleClick = (direction: string) => {
+    setIsMoved(true);
+    if (rowRef.current) {
+      const { scrollLeft, clientWidth } = rowRef.current;
+      const scrollTo =
+        direction === "left"
+          ? scrollLeft - clientWidth
+          : scrollLeft + clientWidth;
+      rowRef.current.scrollTo({ left: scrollTo, behavior: "smooth" });
+    }
+  };
 
   return (
-    <div className="flex flex-col space-y-2 py-16 md:space-y-4 lg:h-[65vh] lg:justify-end lg:pb-12">
-      <div className="absolute top-0 left-0 -z-10 h-[95vh] w-screen">
-        <Image
-          src={`${baseUrl}${movie?.backdrop_path || movie?.poster_path}`}
-          fill
-          style={{ objectFit: "cover" }}
-          alt={movie?.title || movie?.name || "Movie Banner"}
-        />
-        {/* Gradient overlay */}
-        <div className="absolute w-full h-32 bg-gradient-to-t from-[#010511] to-transparent bottom-0 z-20" />
-      </div>
-
-      <h1 className="text-2xl font-bold md:text-4xl lg:text-7xl">
-        {movie?.title || movie?.name || movie?.original_name}
-      </h1>
-      <p className="max-w-xs text-xs text-shadow-md md:max-w-lg md:text-lg lg:max-w-2xl lg:text-2xl">
-        {movie?.overview}
-      </p>
-
-      <div className="flex space-x-3">
-        <button className="bannerButton bg-white text-black">▶️ Play</button>
-        <button className="bannerButton bg-[gray]/70">ℹ️ More Info</button>
+    <div className="h-40 space-y-0.5 md:space-y-2">
+      <h2 className="w-56 cursor-pointer text-sm font-semibold text-[#e5e5e5] transition duration-200 hover:text-white md:text-2xl">
+        {title}
+      </h2>
+      <div className="group relative md:-ml-2">
+        <div
+          className={`absolute top-0 bottom-0 left-2 z-40 m-auto h-9 w-9 cursor-pointer opacity-0 transition hover:scale-125 group-hover:opacity-100 ${
+            !isMoved && "hidden"
+          }`}
+          onClick={() => handleClick("left")}
+        >
+          ⬅️
+        </div>
+        <div
+          ref={rowRef}
+          className="flex items-center space-x-0.5 overflow-x-scroll scrollbar-hide md:space-x-2.5 md:p-2"
+        >
+          {movies?.map((movie) => (
+            <Thumbnail key={movie.id} movie={movie} />
+          ))}
+        </div>
+        <div
+          className="absolute top-0 bottom-0 right-2 z-40 m-auto h-9 w-9 cursor-pointer opacity-0 transition hover:scale-125 group-hover:opacity-100"
+          onClick={() => handleClick("right")}
+        >
+          ➡️
+        </div>
       </div>
     </div>
   );
 }
 
-export default Banner;
+export default Row;
