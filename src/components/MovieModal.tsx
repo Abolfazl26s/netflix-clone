@@ -2,7 +2,6 @@
 
 import { useEffect, useState } from "react";
 import ReactPlayer from "react-player";
-
 import {
   XMarkIcon,
   PlayIcon,
@@ -11,6 +10,7 @@ import {
   SpeakerWaveIcon,
   SpeakerXMarkIcon,
   ArrowTopRightOnSquareIcon,
+  CheckIcon,
 } from "@heroicons/react/24/solid";
 import useMovieModal from "@/store/modalStore";
 import { Genre, Movie } from "@/types";
@@ -21,11 +21,13 @@ function MovieModal() {
   const [trailer, setTrailer] = useState("");
   const [genres, setGenres] = useState<Genre[]>([]);
   const [muted, setMuted] = useState(true);
+  const [isFavorite, setIsFavorite] = useState(false);
 
   useEffect(() => {
     if (!movie) return;
 
     async function fetchMovie() {
+      // ... (کد fetch کردن داده‌ها بدون تغییر)
       const data = await fetch(
         `https://api.themoviedb.org/3/${
           movie?.media_type === "tv" ? "tv" : "movie"
@@ -46,7 +48,16 @@ function MovieModal() {
     }
 
     fetchMovie();
+    // با باز شدن مودال برای یک فیلم جدید، وضعیت علاقه‌مندی ریست می‌شود
+    setIsFavorite(false);
   }, [movie]);
+
+  // ++ ۲. تابع جدید برای مدیریت کلیک روی دکمه ++
+  const handleAddToFavorites = () => {
+    setIsFavorite(!isFavorite);
+    console.log(`Toggled favorite status for: ${movie?.title}`);
+    // در اینجا منطق ارسال به پایگاه داده قرار می‌گیرد
+  };
 
   if (!isOpen) return null;
 
@@ -67,6 +78,7 @@ function MovieModal() {
         </button>
 
         <div className="relative pt-[56.25%]">
+          {/* ... بخش پلیر ویدیو ... */}
           {trailer ? (
             <ReactPlayer
               src={`https://www.youtube.com/watch?v=${trailer}`}
@@ -81,21 +93,29 @@ function MovieModal() {
               <p className="text-white">No trailer available</p>
             </div>
           )}
-
           <div className="absolute bottom-10 flex w-full items-center justify-between px-10">
             <div className="flex space-x-2">
-              <button className="flex items-center gap-x-2 rounded bg-white px-6 py-2 text-lg font-bold text-black transition hover:bg-gray-200 cursor-pointer">
+              <button className="flex items-center gap-x-2 rounded bg-white px-6 py-2 text-lg font-bold text-black transition hover:bg-gray-200">
                 <PlayIcon className="h-7 w-7 text-black" />
                 Play
               </button>
-              <button className="modalButton">
-                <PlusIcon className="h-7 w-7 text-white" />
+
+              <button onClick={handleAddToFavorites} className="modalButton">
+                {isFavorite ? (
+                  <CheckIcon className="h-7 w-7 text-green-400" />
+                ) : (
+                  <PlusIcon className="h-7 w-7 text-white" />
+                )}
               </button>
+
               <button className="modalButton">
                 <HandThumbUpIcon className="h-7 w-7 text-white" />
               </button>
-
-              <Link href={`/movie/${movie?.id}`} className="modalButton">
+              <Link
+                href={`/movie/${movie?.id}`}
+                className="modalButton"
+                onClick={closeModal}
+              >
                 <ArrowTopRightOnSquareIcon className="h-7 w-7 text-white" />
               </Link>
             </div>
@@ -110,6 +130,7 @@ function MovieModal() {
         </div>
 
         <div className="space-y-4 bg-[#141414] px-10 py-8">
+          {/* ... بخش جزئیات ... */}
           <h2 className="text-3xl font-bold text-white">
             {movie?.title || movie?.name || movie?.original_name}
           </h2>
@@ -120,11 +141,11 @@ function MovieModal() {
             <p className="text-gray-400">
               {movie?.release_date || movie?.first_air_date}
             </p>
-            <div className="flex bg-red-400 h-5 items-center justify-center rounded border border-gray-400 px-1.5 text-xs text-white">
+            <div className="flex h-5 items-center justify-center rounded border border-gray-400 px-1.5 text-xs text-gray-400">
               HD
             </div>
           </div>
-          <div className="grid grid-cols-1 gap-x-10 gap-y-6 md:grid-cols-3">
+          <div className="grid grid-cols-1 gap-x-10 gap-y-4 md:grid-cols-3">
             <p className="w-full text-base text-white md:col-span-2">
               {movie?.overview}
             </p>
