@@ -2,7 +2,7 @@
 
 import { useEffect, useRef } from "react";
 
-// ++ ۱. انواع داده کاملاً مشخص برای CreateJS تعریف می‌کنیم ++
+// انواع داده مشخص برای CreateJS
 interface CreateJSGraphics {
   beginFill: (color: string) => CreateJSGraphics;
   drawCircle: (x: number, y: number, r: number) => CreateJSGraphics;
@@ -10,8 +10,8 @@ interface CreateJSGraphics {
   setStrokeStyle: (width: number) => CreateJSGraphics;
 }
 
-// eslint-disable-next-line @typescript-eslint/no-empty-interface
-interface CreateJSFilter {}
+// ++ خطا برطرف شد: به جای interface خالی از type object استفاده می‌کنیم ++
+type CreateJSFilter = object;
 
 interface CreateJSShape {
   alpha: number;
@@ -201,7 +201,7 @@ function ParticleBackground() {
               .drawCircle(0, 0, ball.ballwidth);
           }
 
-          circle.alpha = range(0, 0.1);
+          circle.alpha = range(0.1, 0.1);
           circle.alphaMax = ball.alphamax;
           circle.distance = ball.ballwidth * 2;
           circle.speed = range(2, 10);
