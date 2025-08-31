@@ -1,36 +1,92 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+Netflix Clone with Next.js & TypeScript
+This project is a complete and modern clone of the Netflix web application, built using the latest web technologies. The goal of this project is to showcase skills in building a full-stack, responsive, and high-performance application.
 
-## Getting Started
+🔗 Live Demo (https://netflix-clone-czse.vercel.app/)
 
-First, run the development server:
+✨ Key Features
+🔐 Full Authentication: Sign in with email/password and through OAuth providers (like Google) using NextAuth.js.
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+👤 Profile Selection System: After logging in, users can select a profile to start watching.
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+🎞️ Browse Movies & TV Shows: Display various categories of movies and TV shows (like Trending, Top Rated, etc.) with a horizontal scroll.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+🔍 Advanced Search: An advanced search modal to filter results by name, genre, release year, and type (movie/TV show).
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+📄 Paginated Results Page: Displays search results with pagination controls to navigate through pages.
 
-## Learn More
+🎬 Movie Details Modal: Clicking on any title opens a beautiful modal with a trailer player and detailed information.
 
-To learn more about Next.js, take a look at the following resources:
+💀 Loading Skeletons: An enhanced user experience with animated skeleton loaders while content is being fetched.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+💖 My List Button: Ability to add movies to a personal list (interactive UI).
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+📱 Fully Responsive Design: Optimized and beautiful layout on all devices, from mobile to desktop.
 
-## Deploy on Vercel
+🛠️ Tech Stack
+Framework: Next.js 14+ (App Router)
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+Language: TypeScript
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+UI Library: React
+
+Styling: Tailwind CSS v4.1
+
+Authentication: NextAuth.js
+
+State Management: Zustand
+
+Video Playback: React Player
+
+Icons: Heroicons
+
+Data Source: The Movie Database (TMDB) API
+
+Deployment: Vercel
+
+<br>
+<hr>
+<br>
+
+Netflix Clone - کلون نتفلیکس با Next.js و TypeScript
+این پروژه یک کلون کامل و مدرن از وب اپلیکیشن نتفلیکس است که با استفاده از جدیدترین تکنولوژی‌های وب ساخته شده است. هدف از این پروژه، نمایش مهارت‌ها در ساخت یک اپلیکیشن فول-استک، واکنش‌گرا و با کارایی بالا بوده است.
+
+🔗 لینک نسخه زنده پروژه (Live Demo) (https://netflix-clone-czse.vercel.app/)
+✨ ویژگی‌های اصلی (Features)
+🔐 احراز هویت کامل: ورود با ایمیل/رمز عبور و همچنین از طریق ارائه‌دهندگان OAuth (مانند گوگل) با استفاده از NextAuth.js.
+
+👤 سیستم انتخاب پروفایل: کاربران پس از ورود می‌توانند یک پروفایل را برای تماشا انتخاب کنند.
+
+🎞️ مرور فیلم و سریال: نمایش دسته‌بندی‌های مختلف فیلم و سریال (مانند پرطرفدار، برترین‌ها و...) با اسکرول افقی.
+
+🔍 جستجوی پیشرفته: یک مودال جستجوی پیشرفته برای فیلتر کردن نتایج بر اساس نام، ژانر، سال انتشار و نوع (فیلم/سریال).
+
+📄 صفحه نتایج با صفحه‌بندی: نمایش نتایج جستجو به همراه قابلیت ناوبری بین صفحات.
+
+🎬 مودال جزئیات فیلم: با کلیک روی هر فیلم، یک مودال زیبا با قابلیت پخش تریلر و نمایش جزئیات کامل باز می‌شود.
+
+💀 اسکلت بارگذاری (Loading Skeletons): تجربه کاربری بهبود یافته با نمایش اسکلت‌های انیمیشنی در هنگام بارگذاری محتوا.
+
+💖 دکمه علاقه‌مندی‌ها: قابلیت افزودن فیلم‌ها به لیست شخصی (به صورت تعاملی در UI).
+
+📱 طراحی کاملاً واکنش‌گرا (Responsive): ظاهر بهینه و زیبا در تمام دستگاه‌ها از موبایل تا دسکتاپ.
+
+🛠️ تکنولوژی‌های استفاده شده (Tech Stack)
+فریمورک: Next.js 14+ (App Router)
+
+زبان: TypeScript
+
+رابط کاربری: React
+
+استایل‌دهی: Tailwind CSS v4.1
+
+احراز هویت: NextAuth.js
+
+مدیریت State: Zustand
+
+پخش ویدیو: React Player
+
+آیکون‌ها: Heroicons
+
+منبع داده: The Movie Database (TMDB) API
+
+دیپلوی: Vercel
