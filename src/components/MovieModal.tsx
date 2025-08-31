@@ -16,6 +16,12 @@ import useMovieModal from "@/store/modalStore";
 import { Genre, Movie } from "@/types";
 import Link from "next/link";
 
+// ++ ۱. یک نوع مشخص برای ویدیوها تعریف می‌کنیم ++
+interface Video {
+  type: "Trailer" | "Teaser" | "Clip" | "Featurette" | "Behind the Scenes";
+  key: string;
+}
+
 function MovieModal() {
   const { movie, isOpen, closeModal } = useMovieModal();
   const [trailer, setTrailer] = useState("");
@@ -27,7 +33,6 @@ function MovieModal() {
     if (!movie) return;
 
     async function fetchMovie() {
-      // ... (کد fetch کردن داده‌ها بدون تغییر)
       const data = await fetch(
         `https://api.themoviedb.org/3/${
           movie?.media_type === "tv" ? "tv" : "movie"
@@ -37,8 +42,9 @@ function MovieModal() {
       ).then((response) => response.json());
 
       if (data?.videos) {
+        // ++ ۲. به جای 'any' از نوع 'Video' که تعریف کردیم استفاده می‌کنیم ++
         const index = data.videos.results.findIndex(
-          (element: any) => element.type === "Trailer"
+          (element: Video) => element.type === "Trailer"
         );
         setTrailer(data.videos?.results[index]?.key);
       }
@@ -48,20 +54,18 @@ function MovieModal() {
     }
 
     fetchMovie();
-    // با باز شدن مودال برای یک فیلم جدید، وضعیت علاقه‌مندی ریست می‌شود
     setIsFavorite(false);
   }, [movie]);
 
-  // ++ ۲. تابع جدید برای مدیریت کلیک روی دکمه ++
   const handleAddToFavorites = () => {
     setIsFavorite(!isFavorite);
     console.log(`Toggled favorite status for: ${movie?.title}`);
-    // در اینجا منطق ارسال به پایگاه داده قرار می‌گیرد
   };
 
   if (!isOpen) return null;
 
   return (
+    // ... بقیه کد JSX بدون تغییر باقی می‌ماند ...
     <div
       className="fixed inset-0 z-50 flex items-center justify-center overflow-y-auto bg-black/80 transition-all duration-300"
       onClick={closeModal}
@@ -78,7 +82,6 @@ function MovieModal() {
         </button>
 
         <div className="relative pt-[56.25%]">
-          {/* ... بخش پلیر ویدیو ... */}
           {trailer ? (
             <ReactPlayer
               src={`https://www.youtube.com/watch?v=${trailer}`}
@@ -99,7 +102,6 @@ function MovieModal() {
                 <PlayIcon className="h-7 w-7 text-black" />
                 Play
               </button>
-
               <button onClick={handleAddToFavorites} className="modalButton">
                 {isFavorite ? (
                   <CheckIcon className="h-7 w-7 text-green-400" />
@@ -107,7 +109,6 @@ function MovieModal() {
                   <PlusIcon className="h-7 w-7 text-white" />
                 )}
               </button>
-
               <button className="modalButton">
                 <HandThumbUpIcon className="h-7 w-7 text-white" />
               </button>
@@ -130,7 +131,6 @@ function MovieModal() {
         </div>
 
         <div className="space-y-4 bg-[#141414] px-10 py-8">
-          {/* ... بخش جزئیات ... */}
           <h2 className="text-3xl font-bold text-white">
             {movie?.title || movie?.name || movie?.original_name}
           </h2>
