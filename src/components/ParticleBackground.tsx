@@ -2,8 +2,28 @@
 
 import { useEffect, useRef } from "react";
 
-// ++ ۱. انواع داده مشخص‌تری برای کتابخانه‌های خارجی تعریف می‌کنیم ++
-interface CreateJSShape extends createjs.Shape {
+// ++ ۱. انواع داده کاملاً مشخص برای CreateJS تعریف می‌کنیم ++
+interface CreateJSGraphics {
+  beginFill: (color: string) => CreateJSGraphics;
+  drawCircle: (x: number, y: number, r: number) => CreateJSGraphics;
+  beginStroke: (color: string) => CreateJSGraphics;
+  setStrokeStyle: (width: number) => CreateJSGraphics;
+}
+
+// eslint-disable-next-line @typescript-eslint/no-empty-interface
+interface CreateJSFilter {}
+
+interface CreateJSShape {
+  alpha: number;
+  x: number;
+  y: number;
+  scaleX: number;
+  scaleY: number;
+  graphics: CreateJSGraphics;
+  filters: CreateJSFilter[];
+  cache: (...args: number[]) => void;
+
+  // پراپرتی‌های سفارشی ما
   initX: number;
   initY: number;
   speed: number;
@@ -15,22 +35,17 @@ interface CreateJSShape extends createjs.Shape {
 
 declare global {
   interface Window {
-    // CreateJS یک کتابخانه قدیمی و بزرگ است. استفاده از 'any' در اینجا یک انتخاب عملی است
-    // و با دستور زیر، به ESLint می‌گوییم که این یک مورد استثنا است.
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     createjs: any;
     TweenMax: {
-      // هدف انیمیشن یک آبجکت است، که از 'any' بسیار ایمن‌تر است.
       to: (target: object, duration: number, vars: object) => void;
     };
     Cubic: {
-      // تابع easing یک آبجکت است.
       easeInOut: object;
     };
   }
 }
 
-// تابع کمکی برای بارگذاری اسکریپت
 const loadScript = (src: string): Promise<void> => {
   return new Promise((resolve, reject) => {
     if (document.querySelector(`script[src="${src}"]`)) {
@@ -128,7 +143,6 @@ function ParticleBackground() {
         },
       ];
 
-      // ++ ۲. پارامترها با نوع داده مشخص تایپ شده‌اند ++
       const animateBall = (ball: CreateJSShape) => {
         const scale = range(0.3, 1);
         const xpos = range(
