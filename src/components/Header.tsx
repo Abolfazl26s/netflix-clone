@@ -3,11 +3,13 @@
 import { signOut, useSession } from "next-auth/react";
 import { useEffect, useState } from "react";
 import Link from "next/link";
+import useSearchModal from "@/store/searchStore";
 
 function Header() {
   const { data: session } = useSession();
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMounted, setIsMounted] = useState(false);
+  const { openSearch } = useSearchModal();
 
   useEffect(() => {
     setIsMounted(true);
@@ -35,7 +37,9 @@ function Header() {
           alt="Netflix Logo"
         />
         <ul className="hidden space-x-4 md:flex">
-          <li className="headerLink font-bold text-white">Home</li>
+          <li className="headerLink font-bold text-white">
+            <Link href={"/"}>Home</Link>
+          </li>
           <li className="headerLink">TV Shows</li>
           <li className="headerLink">Movies</li>
           <li className="headerLink">New & Popular</li>
@@ -43,20 +47,25 @@ function Header() {
         </ul>
       </div>
       <div className="flex items-center space-x-4 text-sm font-light">
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          fill="none"
-          viewBox="0 0 24 24"
-          strokeWidth={1.5}
-          stroke="currentColor"
-          className="hidden headerLink h-6 w-6 cursor-pointer sm:inline"
+        <button
+          onClick={openSearch}
+          className="hidde text-white h-6 w-6 sm:inline"
         >
-          <path
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z"
-          />
-        </svg>
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            viewBox="0 0 24 24"
+            strokeWidth={1.5}
+            stroke="currentColor"
+            className="cursor-pointer"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z"
+            />
+          </svg>
+        </button>
         <p className="headerLink">Kids</p>
         <svg
           xmlns="http://www.w3.org/2000/svg"
