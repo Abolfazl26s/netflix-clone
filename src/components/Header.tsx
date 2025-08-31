@@ -4,6 +4,7 @@ import { signOut, useSession } from "next-auth/react";
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import useSearchModal from "@/store/searchStore";
+import Image from "next/image";
 
 function Header() {
   const { data: session } = useSession();
@@ -29,10 +30,10 @@ function Header() {
       className={`${isScrolled && "bg-[#141414]"} transition-all duration-500`}
     >
       <div className="flex items-center space-x-2 md:space-x-10">
-        <img
+        <Image
           src="https://rb.gy/ulxxee"
           width={100}
-          height={100}
+          height={27}
           className="cursor-pointer object-contain"
           alt="Netflix Logo"
         />
@@ -84,11 +85,13 @@ function Header() {
 
         {isMounted &&
           (session ? (
-            <img
+            <Image
               onClick={() => signOut()}
               src={session.user?.image || "https://rb.gy/g1pwyx"}
               alt="Account"
-              className="h-6 w-6 cursor-pointer rounded"
+              width={24}
+              height={24}
+              className="cursor-pointer rounded"
             />
           ) : (
             <Link href="/signin">

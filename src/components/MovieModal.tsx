@@ -13,7 +13,7 @@ import {
   CheckIcon,
 } from "@heroicons/react/24/solid";
 import useMovieModal from "@/store/modalStore";
-import { Genre, Movie } from "@/types";
+import { Genre } from "@/types";
 import Link from "next/link";
 
 // ++ ۱. یک نوع مشخص برای ویدیوها تعریف می‌کنیم ++
