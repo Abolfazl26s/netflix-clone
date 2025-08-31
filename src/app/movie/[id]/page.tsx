@@ -356,7 +356,6 @@ function MovieDetailsPage({ params }: Props) {
                   <h1 className="text-3xl font-bold text-white md:text-4xl">
                     {media.title || media.name}
                   </h1>
-                  {/* ++ راه حل اینجاست: اول ضرب و بعد گرد کردن ++ */}
                   <p className="font-semibold text-green-400">
                     {Math.round(media.vote_average * 10)}% Match
                   </p>
@@ -392,11 +391,11 @@ function MovieDetailsPage({ params }: Props) {
                     {isFavorite ? (
                       <CheckIcon className="h-7 w-7 text-green-400" />
                     ) : (
-                      <PlusIcon className="h-7 w-7" />
+                      <PlusIcon className="h-7 w-7 text-white" />
                     )}
                   </button>
                   <button className="modalButton">
-                    <HandThumbUpIcon className="h-7 w-7" />
+                    <HandThumbUpIcon className="h-7 w-7 text-white" />
                   </button>
                 </div>
               </div>

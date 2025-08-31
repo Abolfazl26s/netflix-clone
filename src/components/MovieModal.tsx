@@ -253,7 +253,7 @@ function MovieModal() {
       >
         <button
           onClick={closeModal}
-          className="modalButton absolute right-4 top-4 !z-40 h-9 w-9 border-none bg-black/50 hover:bg-black/75"
+          className="modalButton text-white absolute right-4 top-4 !z-40 h-9 w-9 border-none bg-black/50 hover:bg-black/75"
         >
           <XMarkIcon className="h-6 w-6" />
         </button>
@@ -283,25 +283,25 @@ function MovieModal() {
                 {isFavorite ? (
                   <CheckIcon className="h-7 w-7 text-green-400" />
                 ) : (
-                  <PlusIcon className="h-7 w-7" />
+                  <PlusIcon className="h-7 w-7 text-white" />
                 )}
               </button>
               <button className="modalButton">
-                <HandThumbUpIcon className="h-7 w-7" />
+                <HandThumbUpIcon className="h-7 w-7 text-white" />
               </button>
               <Link
                 href={`/movie/${movie?.id}`}
                 className="modalButton"
                 onClick={closeModal}
               >
-                <ArrowTopRightOnSquareIcon className="h-7 w-7" />
+                <ArrowTopRightOnSquareIcon className="h-7 w-7 text-white" />
               </Link>
             </div>
             <button className="modalButton" onClick={() => setMuted(!muted)}>
               {muted ? (
-                <SpeakerXMarkIcon className="h-6 w-6" />
+                <SpeakerXMarkIcon className="h-6 w-6 text-white" />
               ) : (
-                <SpeakerWaveIcon className="h-6 w-6" />
+                <SpeakerWaveIcon className="h-6 w-6 text-white" />
               )}
             </button>
           </div>
