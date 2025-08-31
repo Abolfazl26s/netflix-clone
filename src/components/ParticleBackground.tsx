@@ -2,16 +2,35 @@
 
 import { useEffect, useRef } from "react";
 
-// تعریف انواع داده برای کتابخانه‌های خارجی تا TypeScript خطا ندهد
+// ++ ۱. انواع داده مشخص‌تری برای کتابخانه‌های خارجی تعریف می‌کنیم ++
+interface CreateJSShape extends createjs.Shape {
+  initX: number;
+  initY: number;
+  speed: number;
+  distance: number;
+  alphaMax: number;
+  ballwidth: number;
+  flag: string;
+}
+
 declare global {
   interface Window {
+    // CreateJS یک کتابخانه قدیمی و بزرگ است. استفاده از 'any' در اینجا یک انتخاب عملی است
+    // و با دستور زیر، به ESLint می‌گوییم که این یک مورد استثنا است.
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     createjs: any;
-    TweenMax: any;
-    Cubic: any;
+    TweenMax: {
+      // هدف انیمیشن یک آبجکت است، که از 'any' بسیار ایمن‌تر است.
+      to: (target: object, duration: number, vars: object) => void;
+    };
+    Cubic: {
+      // تابع easing یک آبجکت است.
+      easeInOut: object;
+    };
   }
 }
 
-// تابع کمکی برای بارگذاری اسکریپت به صورت Promise
+// تابع کمکی برای بارگذاری اسکریپت
 const loadScript = (src: string): Promise<void> => {
   return new Promise((resolve, reject) => {
     if (document.querySelector(`script[src="${src}"]`)) {
@@ -28,7 +47,7 @@ const loadScript = (src: string): Promise<void> => {
 
 function ParticleBackground() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
-  const isInitialized = useRef(false); // برای جلوگیری از اجرای دوباره در Strict Mode
+  const isInitialized = useRef(false);
 
   useEffect(() => {
     if (isInitialized.current || !canvasRef.current) return;
@@ -109,7 +128,8 @@ function ParticleBackground() {
         },
       ];
 
-      const animateBall = (ball: any) => {
+      // ++ ۲. پارامترها با نوع داده مشخص تایپ شده‌اند ++
+      const animateBall = (ball: CreateJSShape) => {
         const scale = range(0.3, 1);
         const xpos = range(
           ball.initX - ball.distance,
@@ -135,14 +155,14 @@ function ParticleBackground() {
           onCompleteParams: [ball],
         });
       };
-      const fadeout = (ball: any) => {
+      const fadeout = (ball: CreateJSShape) => {
         ball.speed = range(2, 10);
         window.TweenMax.to(ball, ball.speed / 2, { alpha: 0 });
       };
 
       particleSettings.forEach((ball) => {
         for (let s = 0; s < ball.num; s++) {
-          const circle = new window.createjs.Shape();
+          const circle = new window.createjs.Shape() as CreateJSShape;
           if (ball.fill) {
             circle.graphics
               .beginFill(ball.color)
@@ -168,10 +188,10 @@ function ParticleBackground() {
           }
 
           circle.alpha = range(0, 0.1);
-          (circle as any).alphaMax = ball.alphamax;
-          (circle as any).distance = ball.ballwidth * 2;
-          (circle as any).speed = range(2, 10);
-          (circle as any).initY = weightedRange(
+          circle.alphaMax = ball.alphamax;
+          circle.distance = ball.ballwidth * 2;
+          circle.speed = range(2, 10);
+          circle.initY = weightedRange(
             totalHeight,
             0,
             1,
@@ -181,15 +201,17 @@ function ParticleBackground() {
             ],
             0.8
           );
-          (circle as any).initX = weightedRange(
+          circle.initX = weightedRange(
             totalWidth,
             0,
             1,
             [totalWidth / 4, (totalWidth * 3) / 4],
             0.6
           );
-          circle.y = (circle as any).initY;
-          circle.x = (circle as any).initX;
+          circle.y = circle.initY;
+          circle.x = circle.initX;
+          circle.ballwidth = ball.ballwidth;
+          circle.flag = "";
 
           stage.addChild(circle);
           animateBall(circle);
@@ -208,7 +230,9 @@ function ParticleBackground() {
 
       cleanupFunction = () => {
         window.removeEventListener("resize", onResize);
-        window.createjs.Ticker.removeEventListener("tick", ticker);
+        if (window.createjs && window.createjs.Ticker) {
+          window.createjs.Ticker.removeEventListener("tick", ticker);
+        }
         stage.removeAllChildren();
       };
     };
@@ -229,7 +253,6 @@ function ParticleBackground() {
         id="projector"
         className="absolute top-0 left-0 h-full w-full"
       />
-      {/* ++ استایل پس‌زمینه تیره و گرادینت به اینجا اضافه شد ++ */}
       <style jsx global>{`
         body {
           background: #191d1e;
